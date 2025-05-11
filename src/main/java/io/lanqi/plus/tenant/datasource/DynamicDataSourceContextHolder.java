@@ -1,7 +1,7 @@
 package io.lanqi.plus.tenant.datasource;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import org.apache.logging.log4j.util.Strings;
+import io.lanqi.plus.tenant.constant.TenantConstant;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,16 +9,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class DynamicDataSourceContextHolder {
+
+    private static final String EMPTY = "";
+
     private static final TransmittableThreadLocal<String> contextHolder = new TransmittableThreadLocal<>() {
         /**
          * 将 master 数据源的 key作为默认数据源的 key
          */
         @Override
         protected String initialValue() {
-            return "master";
+            return TenantConstant.MASTER_DATASOURCE;
         }
     };
-
 
     /**
      * 数据源的 key集合，用于切换时判断数据源是否存在
@@ -32,7 +34,7 @@ public class DynamicDataSourceContextHolder {
      * @param key 数据源
      */
     public static void setDataSourceKey(String key) {
-        if (Objects.nonNull(key) && !Objects.equals(Strings.EMPTY,key)) {
+        if (Objects.nonNull(key) && !Objects.equals(EMPTY, key)) {
             contextHolder.set(key);
         }
     }
